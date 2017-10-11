@@ -6,5 +6,7 @@
         <file>img/save_file.png</file>
         <file>img/tool.png</file>
         <file>img/Don_2.jpg</file>
+        <file>skin/black.qss</file>
+        <file>skin/write.qss</file>
     </qresource>
 </RCC>

@@ -13,10 +13,13 @@ Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 #include <QtWidgets/QHBoxLayout>
 #include "find_dlg.h"
 
+QApplication* pApp = NULL;
 
 int main(int argc, char *argv[])
 {
   QApplication a(argc, argv);
+
+  pApp = &a;
 
   // QLabel *label = new QLabel("<h2><font color='red'>Hello</font>, world!<h2>");
   // label->show();

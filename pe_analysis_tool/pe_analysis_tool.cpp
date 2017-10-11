@@ -7,6 +7,9 @@
 #include <QLabel>
 #include <QStatusBar>
 #include <QPainter>
+#include <QHBoxLayout>
+#include <QTreeView>
+#include <QTableView>
 
 pe_analysis_tool::pe_analysis_tool(QWidget *parent)
 	: QMainWindow(parent)
@@ -17,11 +20,21 @@ pe_analysis_tool::pe_analysis_tool(QWidget *parent)
   setWindowIcon(QIcon(":/img/Don_2.jpg"));
   // 设置标题
   setWindowTitle(QString::fromLocal8Bit("PE解析工具"));
+  // 设置大小
+  // resize(800, 600);
+
+  // 设置皮肤
+  changeskin();
+
+  // 创建分割用的Action
+  sepAction = new QAction(this);
+  sepAction->setEnabled(false);
 
   // 创建工具栏
   QToolBar* toolBar = new QToolBar(this);
   addToolBar(Qt::TopToolBarArea, toolBar);
   toolBar->setMovable(false);
+  // toolBar->setStyleSheet(QString("QStatusBar::body{background-color:transparent}"));
 
   // 创建一个打开文件的控件
   openAction = new QAction(tr("Open"), this);
@@ -90,6 +103,20 @@ pe_analysis_tool::pe_analysis_tool(QWidget *parent)
   settings = menuBar()->addMenu(tr("&Settings"));
   settings->addAction(preferenceAction);
 
+  // 创建一个切换皮肤的控件
+  aboutAction = new QAction(tr("Change Skin"), this);
+  aboutAction->setStatusTip(tr("Change Skin."));
+  aboutAction->setIcon(QIcon(":/img/Don_2.jpg"));
+  // 绑定该控件的信号槽
+  connect(aboutAction, &QAction::triggered, this, &pe_analysis_tool::changeskin);
+  // 将关于控件绑定到菜单栏
+  aboutmenu = menuBar()->addMenu(tr("&Help"));
+  aboutmenu->addAction(aboutAction);
+  // 在工具栏创建一个分割区域
+  toolBar->addAction(sepAction);
+  // 将控件绑定到工具栏
+  toolBar->addAction(aboutAction);
+
   // 创建一个关于的控件
   aboutAction = new QAction(tr("About"), this);
   aboutAction->setStatusTip(tr("About."));
@@ -98,9 +125,8 @@ pe_analysis_tool::pe_analysis_tool(QWidget *parent)
   connect(aboutAction, &QAction::triggered, this, &pe_analysis_tool::aboutbox);
   // 将关于控件绑定到菜单栏
   // menuBar()->addMenu(QIcon(":/img/Don.png"), tr("About"));
-  aboutmenu = menuBar()->addMenu(tr("&About"));
   aboutmenu->addAction(aboutAction);
-  toolBar->addAction("    ");
+  // 将控件绑定到工具栏
   toolBar->addAction(aboutAction);
 
 
@@ -112,6 +138,7 @@ pe_analysis_tool::pe_analysis_tool(QWidget *parent)
   statusBar()->addWidget(msgLabel);
   // 去掉状态栏无文字显示时的小框
   statusBar()->setStyleSheet(QString("QStatusBar::item{border: 0px}"));
+
 }
 
 void pe_analysis_tool::open()
@@ -170,7 +197,7 @@ void pe_analysis_tool::preference()
 
 void pe_analysis_tool::aboutbox()
 {
-  QMessageBox aboutmsg(QMessageBox::NoIcon, tr("About"), QString::fromLocal8Bit("本程序使用 <font color='blue'>Qt</font> 开发，谢谢使用<br><br>作者博客 <a href='https://kevins.pro'>https://kevins.pro</a>"));
+  QMessageBox aboutmsg(QMessageBox::NoIcon, tr("About"), QString::fromLocal8Bit("本程序使用 <font color='blue'>Qt</font> 开发<br><br>源码：<a href='https://github.com/KevinsBobo/pe-tool'>https://github.com/KevinsBobo/pe-tool</a><br><br>作者博客：<a href='https://kevins.pro'>https://kevins.pro</a>"));
   QPixmap pic(":/img/Don.png");
   QSize size;
   size.setHeight(10);
@@ -178,4 +205,31 @@ void pe_analysis_tool::aboutbox()
   pic.scaled(size, Qt::KeepAspectRatio);
   aboutmsg.setIconPixmap(pic);
   aboutmsg.exec();
+}
+
+void pe_analysis_tool::changeskin()
+{
+  static int nNum = 0;
+
+  if (nNum == 0)
+  {
+    pApp->setStyleSheet("");
+  }
+  else if (nNum == 1)
+  {
+    QFile qss(":/skin/write.qss");
+    qss.open(QFile::ReadOnly);
+    pApp->setStyleSheet(qss.readAll());
+    qss.close();
+  }
+  else
+  {
+    QFile qss(":/skin/black.qss");
+    qss.open(QFile::ReadOnly);
+    pApp->setStyleSheet(qss.readAll());
+    qss.close();
+  }
+
+  nNum += 1;
+  nNum %= 3;
 }
