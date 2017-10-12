@@ -154,6 +154,11 @@ pe_analysis_tool::pe_analysis_tool(QWidget *parent)
   // 隐藏表头
   ui.treeView->setHeaderHidden(true);
   // model->setHorizontalHeaderItem(0, itemPE); // 设置表头
+  // 连接信号槽
+  connect(ui.treeView, &QTreeView::clicked, this, &pe_analysis_tool::treeViewClicked);
+
+  // 将右侧界面切换到空界面
+  ui.stackedWidget->setCurrentIndex(tid_null);
 }
 
 void pe_analysis_tool::open()
@@ -273,6 +278,8 @@ bool pe_analysis_tool::openFile(const QString & strFile, bool bMode)
   }
   peName = strFile.mid(nPos);
   initTreeView();
+  // 将右侧界面切换到exe界面
+  ui.stackedWidget->setCurrentIndex(tid_exe);
   return bRet;
 }
 
@@ -286,81 +293,110 @@ void pe_analysis_tool::initTreeView()
   treeModel->clear();
   QStandardItem* itemPE = new QStandardItem(QIcon(":/img/exe.png") ,"File: " + peName);
   itemPE->setEditable(false);
+  itemPE->setData(QVariant((int)tid_exe));
   treeModel->appendRow(itemPE);
 
   QStandardItem* itemDos = new QStandardItem(QIcon(":/img/file.png"), "Dos Header");
   itemDos->setEditable(false);
+  itemDos->setData(QVariant((int)tid_dos));
   itemPE->appendRow(itemDos);
 
   QStandardItem* itemNt = new QStandardItem(QIcon(":/img/file.png"), "Nt Header");
   itemNt->setEditable(false);
+  itemNt->setData(QVariant((int)tid_nt));
   itemPE->appendRow(itemNt);
 
   QStandardItem* itemFile = new QStandardItem(QIcon(":/img/file.png"), "File Header");
   itemFile->setEditable(false);
+  itemFile->setData(QVariant((int)tid_file));
   itemNt->appendRow(itemFile);
 
   QStandardItem* itemOpt = new QStandardItem(QIcon(":/img/file.png"), "Optional Header");
   itemOpt->setEditable(false);
+  itemOpt->setData(QVariant((int)tid_optional));
   itemNt->appendRow(itemOpt);
 
   QStandardItem* itemData = new QStandardItem(QIcon(":/img/file.png"), "Data Directiories [x]");
   itemData->setEditable(false);
+  itemData->setData(QVariant((int)tid_data));
   itemOpt->appendRow(itemData);
 
   QStandardItem* itemSec = new QStandardItem(QIcon(":/img/file.png"), "Section Header [x]");
   itemSec->setEditable(false);
+  itemSec->setData(QVariant((int)tid_section));
   itemPE->appendRow(itemSec);
 
   QStandardItem* itemImp = new QStandardItem(QIcon(":/img/folder.png"), "Import Diectory");
   itemImp->setEditable(false);
+  itemImp->setData(QVariant((int)tid_import));
   itemPE->appendRow(itemImp);
 
   QStandardItem* itemRel = new QStandardItem(QIcon(":/img/folder.png"), "Relocation Diectory");
   itemRel->setEditable(false);
+  itemRel->setData(QVariant((int)tid_relocation));
   itemPE->appendRow(itemRel);
 
   QStandardItem* itemDeb = new QStandardItem(QIcon(":/img/folder.png"), "Debug Diectory");
   itemDeb->setEditable(false);
+  itemDeb->setData(QVariant((int)tid_debug));
   itemPE->appendRow(itemDeb);
 
   QStandardItem* itemAddr = new QStandardItem(QIcon(":/img/gear.png"), "Address Converter");
   itemAddr->setEditable(false);
+  itemAddr->setData(QVariant((int)tid_address));
   itemPE->appendRow(itemAddr);
 
   QStandardItem* itemDep = new QStandardItem(QIcon(":/img/gear.png"), "Dependency Walker");
   itemDep->setEditable(false);
+  itemDep->setData(QVariant((int)tid_dependency));
   itemPE->appendRow(itemDep);
 
   QStandardItem* itemHex = new QStandardItem(QIcon(":/img/gear.png"), "Hex Editor");
   itemHex->setEditable(false);
+  itemHex->setData(QVariant((int)tid_hex));
   itemPE->appendRow(itemHex);
 
   QStandardItem* itemIde = new QStandardItem(QIcon(":/img/gear.png"), "Identifier");
   itemIde->setEditable(false);
+  itemIde->setData(QVariant((int)tid_identifier));
   itemPE->appendRow(itemIde);
 
   QStandardItem* itemImpAddr = new QStandardItem(QIcon(":/img/gear.png"), "Import Addr");
   itemImpAddr->setEditable(false);
+  itemImpAddr->setData(QVariant((int)tid_importadder));
   itemPE->appendRow(itemImpAddr);
 
   QStandardItem* itemQui = new QStandardItem(QIcon(":/img/gear.png"), "Quick Disassmembler");
   itemQui->setEditable(false);
+  itemQui->setData(QVariant((int)tid_quick));
   itemPE->appendRow(itemQui);
 
   QStandardItem* itemReb = new QStandardItem(QIcon(":/img/gear.png"), "Rebuilder");
   itemReb->setEditable(false);
+  itemReb->setData(QVariant((int)tid_rebuilder));
   itemPE->appendRow(itemReb);
 
   QStandardItem* itemRes = new QStandardItem(QIcon(":/img/gear.png"), "Resource Editor");
   itemRes->setEditable(false);
+  itemRes->setData(QVariant((int)tid_resource));
   itemPE->appendRow(itemRes);
 
   QStandardItem* itemUpx = new QStandardItem(QIcon(":/img/gear2.png"), "UPX Utility");
   itemUpx->setEditable(false);
+  itemUpx->setData(QVariant((int)tid_upx));
   itemPE->appendRow(itemUpx);
 
+  // QVariant d = itemUpx->data();
+
   ui.treeView->expandAll();
+}
+
+void pe_analysis_tool::treeViewClicked(QModelIndex index)
+{
+  QVariant v = treeModel->itemData(index)[257];
+  int nIndex = v.toInt();
+
+  ui.stackedWidget->setCurrentIndex(nIndex);
 }
 
 void pe_analysis_tool::dragEnterEvent(QDragEnterEvent * event)

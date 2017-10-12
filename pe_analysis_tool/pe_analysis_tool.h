@@ -34,6 +34,8 @@ private:
   // 打开文件，bMode = false 为只读打开
   bool openFile(const QString& strFile, bool bMode = true);
   void initTreeView();
+  // 点击树控件后切换堆栈控件页面
+  void treeViewClicked(QModelIndex index);
 
 protected:
   void dragEnterEvent(QDragEnterEvent* event);  // 拖动进入事件
@@ -63,4 +65,30 @@ private:
   QString peName;
 
   QStandardItemModel* treeModel;
+
+  // 树控件和堆栈空间节点/页面顺序
+  enum emTreeId
+  {
+    tid_exe = 0,
+    tid_dos,
+    tid_nt,
+    tid_file,
+    tid_optional,
+    tid_data,
+    tid_section,
+    tid_import,
+    tid_relocation,
+    tid_debug,
+    tid_address,
+    tid_dependency,
+    tid_hex,
+    tid_identifier,
+    tid_importadder,
+    tid_quick,
+    tid_rebuilder,
+    tid_resource,
+    tid_upx,
+    tid_null,
+  };
+
 };
