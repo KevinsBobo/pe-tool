@@ -8,5 +8,16 @@
         <file>img/Don_2.jpg</file>
         <file>skin/black.qss</file>
         <file>skin/write.qss</file>
+        <file>img/search.png</file>
+        <file>img/paste.png</file>
+        <file>img/modify.png</file>
+        <file>img/go.png</file>
+        <file>img/gear2.png</file>
+        <file>img/gear.png</file>
+        <file>img/folder.png</file>
+        <file>img/file.png</file>
+        <file>img/disassemble.png</file>
+        <file>img/copy.png</file>
+        <file>img/exe.png</file>
     </qresource>
 </RCC>

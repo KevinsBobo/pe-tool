@@ -10,6 +10,11 @@
 #include <QHBoxLayout>
 #include <QTreeView>
 #include <QTableView>
+#include <QDragEnterEvent>
+#include <QMimeData>
+#include <QDropEvent>
+#include <QUrl>
+#include <QStandardItemModel>
 
 pe_analysis_tool::pe_analysis_tool(QWidget *parent)
 	: QMainWindow(parent)
@@ -25,6 +30,9 @@ pe_analysis_tool::pe_analysis_tool(QWidget *parent)
 
   // 设置皮肤
   changeskin();
+
+  // 接收拖放
+  setAcceptDrops(true);
 
   // 创建分割用的Action
   sepAction = new QAction(this);
@@ -139,6 +147,13 @@ pe_analysis_tool::pe_analysis_tool(QWidget *parent)
   // 去掉状态栏无文字显示时的小框
   statusBar()->setStyleSheet(QString("QStatusBar::item{border: 0px}"));
 
+
+  // 创建树控件内容
+  treeModel = new QStandardItemModel(ui.treeView);
+  ui.treeView->setModel(treeModel);
+  // 隐藏表头
+  ui.treeView->setHeaderHidden(true);
+  // model->setHorizontalHeaderItem(0, itemPE); // 设置表头
 }
 
 void pe_analysis_tool::open()
@@ -160,6 +175,8 @@ void pe_analysis_tool::open()
   // // fileDialog->setFilter(tr("All Files(*.*)")); // 不能使用这种筛选方式
   // fileDialog->setFilter(QDir::Filters::enum_type::AllDirs);
   // fileDialog->exec();
+
+  openFile(path);
 }
 
 void pe_analysis_tool::opensafe()
@@ -169,6 +186,7 @@ void pe_analysis_tool::opensafe()
                                               ".",                  // 打开文件的路径
                                               tr("All Files(*.*)")  // 文件类型，括号里面可以通过通配符指定文件类型
                                              );
+  openFile(path, false);
 }
 
 void pe_analysis_tool::close()
@@ -232,4 +250,141 @@ void pe_analysis_tool::changeskin()
 
   nNum += 1;
   nNum %= 3;
+}
+
+bool pe_analysis_tool::openFile(const QString & strFile, bool bMode)
+{
+  bool bRet = false;
+  peFile.setFileName(strFile);
+  if (bMode && peFile.open(QIODevice::ReadWrite))
+  {
+    bRet = true;
+  }
+  else if (!bMode && peFile.open(QIODevice::ReadOnly))
+  {
+    bRet = true;
+  }
+
+  // 获取文件名
+  int nPos = strFile.lastIndexOf('/') + 1;
+  if (nPos < 0)
+  {
+    nPos = 0;
+  }
+  peName = strFile.mid(nPos);
+  initTreeView();
+  return bRet;
+}
+
+void pe_analysis_tool::initTreeView()
+{
+  if (!peFile.isOpen())
+  {
+    return;
+  }
+
+  treeModel->clear();
+  QStandardItem* itemPE = new QStandardItem(QIcon(":/img/exe.png") ,"File: " + peName);
+  itemPE->setEditable(false);
+  treeModel->appendRow(itemPE);
+
+  QStandardItem* itemDos = new QStandardItem(QIcon(":/img/file.png"), "Dos Header");
+  itemDos->setEditable(false);
+  itemPE->appendRow(itemDos);
+
+  QStandardItem* itemNt = new QStandardItem(QIcon(":/img/file.png"), "Nt Header");
+  itemNt->setEditable(false);
+  itemPE->appendRow(itemNt);
+
+  QStandardItem* itemFile = new QStandardItem(QIcon(":/img/file.png"), "File Header");
+  itemFile->setEditable(false);
+  itemNt->appendRow(itemFile);
+
+  QStandardItem* itemOpt = new QStandardItem(QIcon(":/img/file.png"), "Optional Header");
+  itemOpt->setEditable(false);
+  itemNt->appendRow(itemOpt);
+
+  QStandardItem* itemData = new QStandardItem(QIcon(":/img/file.png"), "Data Directiories [x]");
+  itemData->setEditable(false);
+  itemOpt->appendRow(itemData);
+
+  QStandardItem* itemSec = new QStandardItem(QIcon(":/img/file.png"), "Section Header [x]");
+  itemSec->setEditable(false);
+  itemPE->appendRow(itemSec);
+
+  QStandardItem* itemImp = new QStandardItem(QIcon(":/img/folder.png"), "Import Diectory");
+  itemImp->setEditable(false);
+  itemPE->appendRow(itemImp);
+
+  QStandardItem* itemRel = new QStandardItem(QIcon(":/img/folder.png"), "Relocation Diectory");
+  itemRel->setEditable(false);
+  itemPE->appendRow(itemRel);
+
+  QStandardItem* itemDeb = new QStandardItem(QIcon(":/img/folder.png"), "Debug Diectory");
+  itemDeb->setEditable(false);
+  itemPE->appendRow(itemDeb);
+
+  QStandardItem* itemAddr = new QStandardItem(QIcon(":/img/gear.png"), "Address Converter");
+  itemAddr->setEditable(false);
+  itemPE->appendRow(itemAddr);
+
+  QStandardItem* itemDep = new QStandardItem(QIcon(":/img/gear.png"), "Dependency Walker");
+  itemDep->setEditable(false);
+  itemPE->appendRow(itemDep);
+
+  QStandardItem* itemHex = new QStandardItem(QIcon(":/img/gear.png"), "Hex Editor");
+  itemHex->setEditable(false);
+  itemPE->appendRow(itemHex);
+
+  QStandardItem* itemIde = new QStandardItem(QIcon(":/img/gear.png"), "Identifier");
+  itemIde->setEditable(false);
+  itemPE->appendRow(itemIde);
+
+  QStandardItem* itemImpAddr = new QStandardItem(QIcon(":/img/gear.png"), "Import Addr");
+  itemImpAddr->setEditable(false);
+  itemPE->appendRow(itemImpAddr);
+
+  QStandardItem* itemQui = new QStandardItem(QIcon(":/img/gear.png"), "Quick Disassmembler");
+  itemQui->setEditable(false);
+  itemPE->appendRow(itemQui);
+
+  QStandardItem* itemReb = new QStandardItem(QIcon(":/img/gear.png"), "Rebuilder");
+  itemReb->setEditable(false);
+  itemPE->appendRow(itemReb);
+
+  QStandardItem* itemRes = new QStandardItem(QIcon(":/img/gear.png"), "Resource Editor");
+  itemRes->setEditable(false);
+  itemPE->appendRow(itemRes);
+
+  QStandardItem* itemUpx = new QStandardItem(QIcon(":/img/gear2.png"), "UPX Utility");
+  itemUpx->setEditable(false);
+  itemPE->appendRow(itemUpx);
+
+  ui.treeView->expandAll();
+}
+
+void pe_analysis_tool::dragEnterEvent(QDragEnterEvent * event)
+{
+  // 在这里可以匹配拖动的文件类型
+  // event->mimeData()->urls()[0].fileName().right(3).compare("jpg");
+  // event->mimeData()->hasFormat("text/uri-list");
+  // 接收拖拽
+  event->acceptProposedAction();
+  // 拒绝拖拽
+  // event->ignore();
+}
+
+void pe_analysis_tool::dropEvent(QDropEvent * event)
+{
+  QList<QUrl> urls = event->mimeData()->urls();
+  if (urls.isEmpty())
+  {
+    return;
+  }
+  QString fileName = urls.first().toLocalFile();
+  if (fileName.isEmpty())
+  {
+    return;
+  }
+  openFile(fileName);
 }

@@ -13,12 +13,13 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QListView>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QSplitter>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QTableView>
+#include <QtWidgets/QTextEdit>
+#include <QtWidgets/QTreeView>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -34,20 +35,27 @@ public:
     QAction *actionPer;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
-    QHBoxLayout *mainHorizontalLayout;
-    QListView *listView;
+    QSplitter *splitter;
+    QTreeView *treeView;
     QStackedWidget *stackedWidget;
-    QWidget *page_3;
-    QHBoxLayout *horizontalLayout_2;
-    QTableView *tableView;
-    QWidget *page_4;
-    QHBoxLayout *horizontalLayout;
+    QWidget *pageMain;
+    QVBoxLayout *verticalLayout_2;
+    QSplitter *splitter_2;
+    QWidget *widget;
+    QTableView *tableFileInfoUp;
+    QWidget *widget_2;
+    QTableView *tableFileInfoDown;
+    QWidget *pageAddr;
+    QVBoxLayout *verticalLayout_3;
+    QSplitter *splitter_3;
+    QTableView *tableAddr;
+    QTextEdit *textEdit;
 
     void setupUi(QMainWindow *pe_analysis_toolClass)
     {
         if (pe_analysis_toolClass->objectName().isEmpty())
             pe_analysis_toolClass->setObjectName(QStringLiteral("pe_analysis_toolClass"));
-        pe_analysis_toolClass->resize(978, 667);
+        pe_analysis_toolClass->resize(967, 667);
         actionOpen = new QAction(pe_analysis_toolClass);
         actionOpen->setObjectName(QStringLiteral("actionOpen"));
         actionClose = new QAction(pe_analysis_toolClass);
@@ -61,48 +69,89 @@ public:
         centralWidget = new QWidget(pe_analysis_toolClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         verticalLayout = new QVBoxLayout(centralWidget);
-        verticalLayout->setSpacing(6);
+        verticalLayout->setSpacing(3);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
-        mainHorizontalLayout = new QHBoxLayout();
-        mainHorizontalLayout->setSpacing(0);
-        mainHorizontalLayout->setObjectName(QStringLiteral("mainHorizontalLayout"));
-        listView = new QListView(centralWidget);
-        listView->setObjectName(QStringLiteral("listView"));
-        listView->setMaximumSize(QSize(230, 16777215));
-
-        mainHorizontalLayout->addWidget(listView);
-
-        stackedWidget = new QStackedWidget(centralWidget);
+        splitter = new QSplitter(centralWidget);
+        splitter->setObjectName(QStringLiteral("splitter"));
+        splitter->setOrientation(Qt::Horizontal);
+        splitter->setHandleWidth(2);
+        treeView = new QTreeView(splitter);
+        treeView->setObjectName(QStringLiteral("treeView"));
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(treeView->sizePolicy().hasHeightForWidth());
+        treeView->setSizePolicy(sizePolicy);
+        treeView->setMaximumSize(QSize(16777215, 16777215));
+        treeView->setBaseSize(QSize(0, 0));
+        splitter->addWidget(treeView);
+        stackedWidget = new QStackedWidget(splitter);
         stackedWidget->setObjectName(QStringLiteral("stackedWidget"));
-        page_3 = new QWidget();
-        page_3->setObjectName(QStringLiteral("page_3"));
-        horizontalLayout_2 = new QHBoxLayout(page_3);
-        horizontalLayout_2->setSpacing(0);
-        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
-        horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
-        tableView = new QTableView(page_3);
-        tableView->setObjectName(QStringLiteral("tableView"));
+        pageMain = new QWidget();
+        pageMain->setObjectName(QStringLiteral("pageMain"));
+        verticalLayout_2 = new QVBoxLayout(pageMain);
+        verticalLayout_2->setSpacing(3);
+        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
+        verticalLayout_2->setContentsMargins(0, 0, 0, 0);
+        splitter_2 = new QSplitter(pageMain);
+        splitter_2->setObjectName(QStringLiteral("splitter_2"));
+        splitter_2->setOrientation(Qt::Vertical);
+        splitter_2->setHandleWidth(2);
+        widget = new QWidget(splitter_2);
+        widget->setObjectName(QStringLiteral("widget"));
+        widget->setAutoFillBackground(true);
+        tableFileInfoUp = new QTableView(widget);
+        tableFileInfoUp->setObjectName(QStringLiteral("tableFileInfoUp"));
+        tableFileInfoUp->setGeometry(QRect(0, 0, 461, 261));
+        tableFileInfoUp->setMaximumSize(QSize(16777215, 16777215));
+        tableFileInfoUp->horizontalHeader()->setDefaultSectionSize(100);
+        splitter_2->addWidget(widget);
+        widget_2 = new QWidget(splitter_2);
+        widget_2->setObjectName(QStringLiteral("widget_2"));
+        tableFileInfoDown = new QTableView(widget_2);
+        tableFileInfoDown->setObjectName(QStringLiteral("tableFileInfoDown"));
+        tableFileInfoDown->setGeometry(QRect(0, 0, 461, 141));
+        tableFileInfoDown->setMaximumSize(QSize(16777215, 16777215));
+        splitter_2->addWidget(widget_2);
 
-        horizontalLayout_2->addWidget(tableView);
+        verticalLayout_2->addWidget(splitter_2);
 
-        stackedWidget->addWidget(page_3);
-        page_4 = new QWidget();
-        page_4->setObjectName(QStringLiteral("page_4"));
-        horizontalLayout = new QHBoxLayout(page_4);
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        stackedWidget->addWidget(page_4);
+        stackedWidget->addWidget(pageMain);
+        pageAddr = new QWidget();
+        pageAddr->setObjectName(QStringLiteral("pageAddr"));
+        verticalLayout_3 = new QVBoxLayout(pageAddr);
+        verticalLayout_3->setSpacing(3);
+        verticalLayout_3->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
+        verticalLayout_3->setContentsMargins(0, 0, 0, 0);
+        splitter_3 = new QSplitter(pageAddr);
+        splitter_3->setObjectName(QStringLiteral("splitter_3"));
+        splitter_3->setLineWidth(1);
+        splitter_3->setOrientation(Qt::Vertical);
+        splitter_3->setHandleWidth(2);
+        tableAddr = new QTableView(splitter_3);
+        tableAddr->setObjectName(QStringLiteral("tableAddr"));
+        tableAddr->setMaximumSize(QSize(16777215, 16777215));
+        tableAddr->setBaseSize(QSize(0, 0));
+        splitter_3->addWidget(tableAddr);
+        textEdit = new QTextEdit(splitter_3);
+        textEdit->setObjectName(QStringLiteral("textEdit"));
+        splitter_3->addWidget(textEdit);
 
-        mainHorizontalLayout->addWidget(stackedWidget);
+        verticalLayout_3->addWidget(splitter_3);
 
+        stackedWidget->addWidget(pageAddr);
+        splitter->addWidget(stackedWidget);
 
-        verticalLayout->addLayout(mainHorizontalLayout);
+        verticalLayout->addWidget(splitter);
 
         pe_analysis_toolClass->setCentralWidget(centralWidget);
+        tableFileInfoUp->raise();
+        tableFileInfoDown->raise();
+        splitter->raise();
 
         retranslateUi(pe_analysis_toolClass);
 
