@@ -33,7 +33,10 @@ private:
   void changeskin();
   // 打开文件，bMode = false 为只读打开
   bool openFile(const QString& strFile, bool bMode = true);
+  // 初始化树控件
   void initTreeView();
+  // 初始化右侧所有页面
+  void initRight();
   // 点击树控件后切换堆栈控件页面
   void treeViewClicked(QModelIndex index);
 
@@ -65,6 +68,23 @@ private:
   QString peName;
 
   QStandardItemModel* treeModel;
+  QStandardItemModel* tableExeUpModel;
+  QStandardItemModel* tableExeDownModel;
+  QStandardItemModel* tableDosModel;
+  QStandardItemModel* tableNtModel;
+  QStandardItemModel* tableFileModel;
+  QStandardItemModel* tableOptModel;
+  QStandardItemModel* tableDataModel;
+  QStandardItemModel* tableSecModel;
+  QStandardItemModel* tableImpDirUpModel;
+  QStandardItemModel* tableImpDirDownModel;
+  QStandardItemModel* tableRelUpModel;
+  QStandardItemModel* tableRelDownModel;
+  QStandardItemModel* tableDebugModel;
+  QStandardItemModel* tableAddrModel;
+  QStandardItemModel* tableDepUpModel;
+  QStandardItemModel* tableDepDownModel;
+
 
   // 树控件和堆栈空间节点/页面顺序
   enum emTreeId

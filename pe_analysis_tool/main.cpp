@@ -11,6 +11,7 @@ Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QHBoxLayout>
+#include <QTableWidget>
 #include "find_dlg.h"
 
 QApplication* pApp = NULL;
@@ -20,6 +21,26 @@ int main(int argc, char *argv[])
   QApplication a(argc, argv);
 
   pApp = &a;
+
+
+  // QTableWidget *rootWidget = new QTableWidget();
+  // rootWidget->setColumnCount(2);
+  // rootWidget->setRowCount(1);
+  // rootWidget->horizontalHeader()->setStretchLastSection(true);
+  // rootWidget->verticalHeader()->setVisible(false);
+  // rootWidget->setHorizontalHeaderLabels(QStringList() << QString::fromLocal8Bit("HHH")
+  // << "test");
+
+  // QTableWidget *widget1 = new QTableWidget;
+  // widget1->setColumnCount(1);
+  // widget1->setRowCount(0);
+  // // widget1->verticalHeader()->setStretchLastSection(true);
+  // widget1->horizontalHeader()->setVisible(true);
+  // widget1->verticalHeader()->setVisible(false);
+  // widget1->setHorizontalHeaderLabels(QStringList() << QString::fromLocal8Bit("½á¹û"));
+  // rootWidget->setCellWidget(0,0,widget1);
+
+  // rootWidget->show();
 
   // QLabel *label = new QLabel("<h2><font color='red'>Hello</font>, world!<h2>");
   // label->show();

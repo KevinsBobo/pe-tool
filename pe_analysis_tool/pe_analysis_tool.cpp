@@ -100,6 +100,8 @@ pe_analysis_tool::pe_analysis_tool(QWidget *parent)
   connect(saveasAction, &QAction::triggered, this, &pe_analysis_tool::saveas);
   // 将控件绑定到菜单栏
   file->addAction(saveasAction);
+  // 初始设置该控件不能使用
+  saveasAction->setEnabled(false);
 
   // 创建一个配置的控件
   preferenceAction = new QAction(tr("Preference"), this);
@@ -159,6 +161,9 @@ pe_analysis_tool::pe_analysis_tool(QWidget *parent)
 
   // 将右侧界面切换到空界面
   ui.stackedWidget->setCurrentIndex(tid_null);
+  // 初始化右侧界面
+  initRight();
+
 }
 
 void pe_analysis_tool::open()
@@ -280,6 +285,10 @@ bool pe_analysis_tool::openFile(const QString & strFile, bool bMode)
   initTreeView();
   // 将右侧界面切换到exe界面
   ui.stackedWidget->setCurrentIndex(tid_exe);
+  // 激活保存控件
+  saveAction->setEnabled(true);
+  saveasAction->setEnabled(true);
+
   return bRet;
 }
 
@@ -389,6 +398,121 @@ void pe_analysis_tool::initTreeView()
   // QVariant d = itemUpx->data();
 
   ui.treeView->expandAll();
+}
+
+void pe_analysis_tool::initRight()
+{
+  // 创建文件信息上面表格控件内容
+  tableExeUpModel = new QStandardItemModel(ui.tableFileInfoUp);
+  ui.tableFileInfoUp->setModel(tableExeUpModel);
+  ui.tableFileInfoUp->verticalHeader()->setVisible(false);
+  // 添加水平表头
+  // QStandardItem* item = new QStandardItem("Member");
+  // tableExeUpModel->setHorizontalHeaderItem(0, item); // 设置表头
+  // item = new QStandardItem("Offset");
+  // tableExeUpModel->setHorizontalHeaderItem(1, item);
+  // item = new QStandardItem("Size");
+  // tableExeUpModel->setHorizontalHeaderItem(2, item);
+  // item = new QStandardItem("Value");
+  // tableExeUpModel->setHorizontalHeaderItem(3, item);
+  tableExeUpModel->setHorizontalHeaderLabels(QStringList()
+                                             << "Property"
+                                             << "Value");
+  ui.tableFileInfoUp->setColumnWidth(1, 300);
+  ui.tableFileInfoUp->verticalHeader()->setDefaultSectionSize(25);
+  QStandardItem* item = new QStandardItem("File Name");
+  item->setEditable(false);
+  // QStandardItem* item2 = new QStandardItem("123");
+  // QList<QStandardItem*> list;
+  // list.append(item);
+  // list.append(item2);
+  // tableExeUpModel->appendRow(list);
+  tableExeUpModel->appendRow(item);
+  item = new QStandardItem("File Type");
+  item->setEditable(false);
+  tableExeUpModel->appendRow(item);
+  item = new QStandardItem("File Info");
+  item->setEditable(false);
+  tableExeUpModel->appendRow(item);
+  item = new QStandardItem("File Size");
+  item->setEditable(false);
+  tableExeUpModel->appendRow(item);
+  item = new QStandardItem("PE Size");
+  item->setEditable(false);
+  tableExeUpModel->appendRow(item);
+  item = new QStandardItem("Created");
+  item->setEditable(false);
+  tableExeUpModel->appendRow(item);
+  item = new QStandardItem("Modified");
+  item->setEditable(false);
+  tableExeUpModel->appendRow(item);
+  item = new QStandardItem("Accessed");
+  item->setEditable(false);
+  tableExeUpModel->appendRow(item);
+  item = new QStandardItem("MD5");
+  item->setEditable(false);
+  tableExeUpModel->appendRow(item);
+  item = new QStandardItem("SHA-1");
+  item->setEditable(false);
+  tableExeUpModel->appendRow(item);
+
+  // 创建文件信息下面表格控件内容
+  tableExeDownModel = new QStandardItemModel(ui.tableFileInfoDown);
+  ui.tableFileInfoDown->setModel(tableExeDownModel);
+  ui.tableFileInfoDown->verticalHeader()->setVisible(false);
+  tableExeDownModel->setHorizontalHeaderLabels(QStringList()
+                                             << "Property"
+                                             << "Value");
+  ui.tableFileInfoDown->setColumnWidth(1, 300);
+  ui.tableFileInfoDown->verticalHeader()->setDefaultSectionSize(25);
+  item = new QStandardItem("Empty");
+  item->setEditable(false);
+  QStandardItem* item2 = new QStandardItem("No additional info available");
+  item2->setEditable(false);
+  QList<QStandardItem*> list;
+  list.append(item);
+  list.append(item2);
+  tableExeDownModel->appendRow(list);
+
+  /*
+  tableExeUpModel->setVerticalHeaderLabels(QStringList()
+                                           << "e_magic"
+                                           << "e_cblp"
+                                           << "e_cp"
+                                           << "e_crlc"
+                                           << "e_cparhdr"
+                                           << "e_minalloc"
+                                           << "e_maxalloc"
+                                           << "e_ss"
+                                           << "e_sp"
+                                           << "e_csum"
+                                           << "e_ip"
+                                           << "e_cs"
+                                           << "e_lfarlc"
+                                           << "e_ovno"
+                                           << "e_res"
+                                           << ""
+                                           << ""
+                                           << ""
+                                           << "e_oemid"
+                                           << "e_oeminfo"
+                                           << "e_res2"
+                                           << ""
+                                           << ""
+                                           << ""
+                                           << ""
+                                           << ""
+                                           << ""
+                                           << ""
+                                           << ""
+                                           << ""
+                                           << "e_lfanew"
+                                          );
+  */
+
+
+  // 连接信号槽
+  // connect(ui.treeView, &QTreeView::clicked, this, &pe_analysis_tool::treeViewClicked);
 }
 
 void pe_analysis_tool::treeViewClicked(QModelIndex index)

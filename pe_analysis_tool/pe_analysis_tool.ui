@@ -322,8 +322,8 @@
             <property name="handleWidth">
              <number>2</number>
             </property>
-            <widget class="QTableView" name="tableViewExpUp"/>
-            <widget class="QTableView" name="tableViewExpDown"/>
+            <widget class="QTableView" name="tableExpUp"/>
+            <widget class="QTableView" name="tableExpDown"/>
            </widget>
           </item>
          </layout>

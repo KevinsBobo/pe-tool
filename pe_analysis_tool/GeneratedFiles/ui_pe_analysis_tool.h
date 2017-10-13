@@ -68,8 +68,8 @@ public:
     QWidget *pageExp;
     QVBoxLayout *verticalLayout_10;
     QSplitter *splitter_4;
-    QTableView *tableViewExpUp;
-    QTableView *tableViewExpDown;
+    QTableView *tableExpUp;
+    QTableView *tableExpDown;
     QWidget *pageImpDir;
     QVBoxLayout *verticalLayout_11;
     QSplitter *splitter_5;
@@ -295,12 +295,12 @@ public:
         splitter_4->setObjectName(QStringLiteral("splitter_4"));
         splitter_4->setOrientation(Qt::Vertical);
         splitter_4->setHandleWidth(2);
-        tableViewExpUp = new QTableView(splitter_4);
-        tableViewExpUp->setObjectName(QStringLiteral("tableViewExpUp"));
-        splitter_4->addWidget(tableViewExpUp);
-        tableViewExpDown = new QTableView(splitter_4);
-        tableViewExpDown->setObjectName(QStringLiteral("tableViewExpDown"));
-        splitter_4->addWidget(tableViewExpDown);
+        tableExpUp = new QTableView(splitter_4);
+        tableExpUp->setObjectName(QStringLiteral("tableExpUp"));
+        splitter_4->addWidget(tableExpUp);
+        tableExpDown = new QTableView(splitter_4);
+        tableExpDown->setObjectName(QStringLiteral("tableExpDown"));
+        splitter_4->addWidget(tableExpDown);
 
         verticalLayout_10->addWidget(splitter_4);
 
@@ -489,7 +489,7 @@ public:
 
         retranslateUi(pe_analysis_toolClass);
 
-        stackedWidget->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(7);
 
 
         QMetaObject::connectSlotsByName(pe_analysis_toolClass);
